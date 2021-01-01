@@ -5,6 +5,7 @@ module.exports = {
   getAllPlants,
   createUser,
   createPlant,
+  updatePlant,
 };
 
 function getAllUsers() {
@@ -23,5 +24,10 @@ function getAllPlants() {
 
 async function createPlant(data) {
   await db("plants").insert(data);
+  return data;
+}
+
+async function updatePlant(id, data) {
+  await db("plants").update(data);
   return data;
 }
