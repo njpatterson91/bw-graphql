@@ -6,6 +6,7 @@ module.exports = {
   createUser,
   createPlant,
   updatePlant,
+  getByUsername,
 };
 
 function getAllUsers() {
@@ -30,4 +31,9 @@ async function createPlant(data) {
 async function updatePlant(id, data) {
   await db("plants").update(data);
   return data;
+}
+
+async function getByUsername(name) {
+  const user = await db("users").where("username", name).first();
+  return user;
 }

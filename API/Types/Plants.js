@@ -15,6 +15,7 @@ const PlantType = new GraphQLObjectType({
     species: { type: GraphQLNonNull(GraphQLString) },
     h2oFrequency: { type: GraphQLNonNull(GraphQLString) },
     message: { type: GraphQLString },
+    jwt: { type: GraphQLString },
   }),
 });
 

@@ -1,23 +1,19 @@
 const {
-  GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLList,
   GraphQLInt,
   GraphQLNonNull,
 } = require("graphql");
 
-const UserType = new GraphQLObjectType({
+const LoginType = new GraphQLObjectType({
   name: "Users",
   description: "This represents a user",
   fields: () => ({
     id: { type: GraphQLNonNull(GraphQLInt) },
     username: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
-    telephone: { type: GraphQLNonNull(GraphQLString) },
-    message: { type: GraphQLString },
-    jwt: { type: GraphQLString },
+    jwt: { type: GraphQLNonNull(GraphQLString) },
   }),
 });
 
-module.exports = UserType;
+module.exports = LoginType;

@@ -11,7 +11,7 @@ module.exports = {
   development: {
     client: "pg",
     connection:
-      "postgres://hykcccgn:zkUqTNzcnQld5S1IucgYOdhGWWGNVzRe@suleiman.db.elephantsql.com:5432/hykcccgn",
+      "postgres://ogukbyab:nIwFsFYu5K3sB4JjrElr7BaJBaPIchIF@chunee.db.elephantsql.com/ogukbyab",
     migrations: {
       directory: "./data/migrations",
     },
@@ -24,7 +24,7 @@ module.exports = {
   production: {
     client: "pg",
     connection:
-      "postgres://hykcccgn:zkUqTNzcnQld5S1IucgYOdhGWWGNVzRe@suleiman.db.elephantsql.com:5432/hykcccgn",
+      "postgres://ogukbyab:nIwFsFYu5K3sB4JjrElr7BaJBaPIchIF@chunee.db.elephantsql.com/ogukbyab",
     migrations: {
       directory: "./data/migrations",
     },
