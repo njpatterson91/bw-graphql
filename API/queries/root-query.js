@@ -4,12 +4,11 @@ const {
   GraphQLNonNull,
   GraphQLString,
 } = require("graphql");
-const TestModel = require("../models/db-model");
+const DBModel = require("../models/db-model");
 const UserType = require("../Types/Users");
 const PlantType = require("../Types/Plants");
 const token = require("../middleware/makeToken");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const verifyToken = require("../middleware/verifyToken");
 
 const RootQueryType = new GraphQLObjectType({
@@ -20,16 +19,24 @@ const RootQueryType = new GraphQLObjectType({
       type: new GraphQLList(UserType),
       description: "List of Users",
       resolve: async () => {
-        const users = await TestModel.getAllUsers();
+        const users = await DBModel.getAllUsers();
         return users;
       },
     },
     plants: {
       type: new GraphQLList(PlantType),
       description: "List of all plants",
-      resolve: async () => {
-        const plants = await TestModel.getAllPlants();
-        return plants;
+      args: {
+        jwt: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parent, args) => {
+        const status = verifyToken(args.jwt);
+        if (status == "failed") {
+          return [{ message: "invalid token" }];
+        } else {
+          const plants = await DBModel.getAllPlants(status.id);
+          return plants;
+        }
       },
     },
     leTest: {
@@ -40,7 +47,6 @@ const RootQueryType = new GraphQLObjectType({
       },
       resolve: async (parent, args) => {
         const status = verifyToken(args.jwt);
-        // console.log(verifyToken(args.jwt));
         return status;
       },
     },
@@ -52,7 +58,7 @@ const RootQueryType = new GraphQLObjectType({
         password: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve: async (parent, args) => {
-        const user = await TestModel.getByUsername(args.username);
+        const user = await DBModel.getByUsername(args.username);
         if (bcrypt.compareSync(args.password, user.password)) {
           user.jwt = token(user);
         } else {

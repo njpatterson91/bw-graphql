@@ -9,7 +9,7 @@ exports.up = function (knex) {
     .createTable("plants", (table) => {
       table.increments();
       table
-        .integer("user-id")
+        .integer("userID")
         .unsigned()
         .references("id")
         .inTable("users")

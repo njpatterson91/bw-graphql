@@ -18,8 +18,8 @@ async function createUser(data) {
   return data;
 }
 
-function getAllPlants() {
-  const plants = db("plants");
+function getAllPlants(id) {
+  const plants = db("plants").where("userID", id);
   return plants;
 }
 
@@ -29,7 +29,7 @@ async function createPlant(data) {
 }
 
 async function updatePlant(id, data) {
-  await db("plants").update(data);
+  await db("plants").where("id", id).update(data);
   return data;
 }
 

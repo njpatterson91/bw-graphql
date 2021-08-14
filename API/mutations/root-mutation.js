@@ -4,10 +4,11 @@ const {
   GraphQLNonNull,
   GraphQLInt,
 } = require("graphql");
-const TestModel = require("../models/db-model");
+const DBModel = require("../models/db-model");
 const UserType = require("../Types/Users");
 const PlantType = require("../Types/Plants");
 const bcrypt = require("bcryptjs");
+const verifyToken = require("../middleware/verifyToken");
 const RootMutationType = new GraphQLObjectType({
   name: "Mutation",
   description: "Root Mutation",
@@ -28,26 +29,30 @@ const RootMutationType = new GraphQLObjectType({
           password: hash,
           telephone: args.telephone,
         };
-        return TestModel.createUser(newUser);
+        return DBModel.createUser(newUser);
       },
     },
     addPlant: {
       type: PlantType,
       description: "Add a plant",
       args: {
-        userID: { type: GraphQLNonNull(GraphQLInt) },
         nickname: { type: GraphQLNonNull(GraphQLString) },
         species: { type: GraphQLNonNull(GraphQLString) },
         h2oFrequency: { type: GraphQLNonNull(GraphQLString) },
+        jwt: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve: async (parent, args) => {
+        const status = verifyToken(args.jwt);
         const newPlant = {
-          userID: args.userID,
+          userID: status.id,
           nickname: args.nickname,
           species: args.species,
           h2oFrequency: args.h2oFrequency,
         };
-        return TestModel.createPlant(newPlant);
+
+        const data = await DBModel.createPlant(newPlant);
+        console.log(data);
+        return data;
       },
     },
     updatePlant: {
@@ -67,7 +72,7 @@ const RootMutationType = new GraphQLObjectType({
           species: args.species,
           h2oFrequency: args.h2oFrequency,
         };
-        return TestModel.updatePlant(args.id, newPlant);
+        return DBModel.updatePlant(args.id, newPlant);
       },
     },
   }),
